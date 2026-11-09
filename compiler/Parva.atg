@@ -1,0 +1,586 @@
+import java.util.*;
+import library.*;
+
+COMPILER Parva $NC
+/* Parva level 1 grammar  - Coco/R for Java
+   P.D. Terry, Rhodes University -- modified by K. Bradshaw 2025
+   Java operator precedences with short circuit evaluation
+   No functions and no optimization
+   int, char and bool types -- Solution for prac7 2025 
+   
+   modified by Martin Vosloo and Kago Songo 2026*/
+
+
+  public static boolean
+    debug    = false,
+    optimize = false,
+    listCode = true,  	// output code file 
+    warnings = true;	// print warnings
+
+  static final boolean
+    known = true;
+
+  // This next method might better be located in the code generator.  Traditionally
+  // it has been left in the ATG file, but that might change in future years
+  //
+  // Not that while sequences like \n \r and \t result in special mappings to lf, cr and tab
+  // other sequences like \x \: and \9 simply map to x, ; and 9 .  Most students don't seem
+  // to know this!
+
+  static String unescape(String s) {
+  /* Replaces escape sequences in s by their Unicode values */
+    StringBuilder buf = new StringBuilder();
+    int i = 0;
+    while (i < s.length()) {
+      if (s.charAt(i) == '\\') {
+        switch (s.charAt(i+1)) {
+          case '\\': buf.append('\\'); break;
+          case '\'': buf.append('\''); break;
+          case '\"': buf.append('\"'); break;
+          case  'r': buf.append('\r'); break;
+          case  'n': buf.append('\n'); break;
+          case  't': buf.append('\t'); break;
+          case  'b': buf.append('\b'); break;
+          case  'f': buf.append('\f'); break;
+          default:   buf.append(s.charAt(i+1)); break;
+        }
+        i += 2;
+      }
+      else {
+        buf.append(s.charAt(i));
+        i++;
+      }
+    }
+    return buf.toString();
+  } // unescape
+
+  static boolean isArith(int type) {
+    return Trace.check("isArith", type, arith(type));                                 // TRACE
+  } // isArith
+
+  private static boolean arith(int type) {                                            // TRACE
+    return type == Types.intType || type == Types.charType || type == Types.noType;   // TRACE (original body)
+  }                                                                                    // TRACE
+
+  static boolean isBool(int type) {
+    return Trace.check("isBool", type, type == Types.boolType || type == Types.noType); // TRACE
+  } // isBool
+
+  static boolean isArray(int type) {
+    return Trace.check("isArray", type, array(type));                                 // TRACE
+  } // isArray
+
+  private static boolean array(int type) {                                            // TRACE
+    return (type % 2) == 1;                                                           // TRACE (original body)
+  }                                                                                    // TRACE
+
+  static boolean compatible(int typeOne, int typeTwo) {
+  // Returns true if typeOne is compatible (and comparable for equality) with typeTwo
+    return Trace.check("compatible", typeOne, typeTwo, typeOne == typeTwo             // TRACE
+           || arith(typeOne) && arith(typeTwo)                                        // TRACE
+           || typeOne == Types.noType || typeTwo == Types.noType
+           || array(typeOne) && typeTwo == Types.nullType                             // TRACE
+           || array(typeTwo) && typeOne == Types.nullType);                           // TRACE
+  } // compatible
+
+  static boolean assignable(int typeOne, int typeTwo) {
+  // Returns true if a variable of typeOne may be assigned a value of typeTwo
+    return Trace.check("assignable", typeOne, typeTwo, typeOne == typeTwo             // TRACE
+           || typeOne == Types.intType && typeTwo == Types.charType
+           || typeOne == Types.noType || typeTwo == Types.noType
+           || array(typeOne) && typeTwo == Types.nullType);                           // TRACE
+  } // assignable
+
+/* -------------------------------------------------------------------------- */
+
+CHARACTERS
+  lf         = CHR(10) .
+  backslash  = CHR(92) .
+  control    = CHR(0) .. CHR(31) .
+  letter     = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" .
+  digit      = "0123456789" .
+  stringCh   = ANY - '"' - control - backslash .
+  charCh     = ANY - "'" - control - backslash .
+  printable  = ANY - control .
+
+TOKENS
+  identifier = letter { { "_" } (letter | digit) } .
+  number     = digit { digit } .
+  stringLit  = '"' { stringCh | backslash printable } '"' .
+  charLit    = "'" ( charCh   | backslash printable ) "'" .
+
+PRAGMAS
+  CodeOn      = "$C+" .                      (. listCode  = true; .)
+  CodeOff     = "$C-" .                      (. listCode  = false; .)
+  DebugOn     = "$D+" .                      (. debug = true; .)
+  DebugOff    = "$D-" .                      (. debug = false; .)
+
+  StackDump   = "$SD" .                      (. if (debug) CodeGen.stack(); .)
+  HeapDump    = "$HD" .                      (. if (debug) CodeGen.heap(); .)
+  TableDump   = "$ST" .                      (. if (debug) Table.printTable(OutFile.StdOut);
+                                                if (debug) Types.show(OutFile.StdOut); .)
+
+COMMENTS FROM "//" TO lf
+COMMENTS FROM "/*" TO "*/"
+
+IGNORE CHR(9) .. CHR(13)
+
+PRODUCTIONS
+
+  Parva
+  =  "void"                                  (. Entry program = new Entry(); .)
+     Ident<out program.name> "(" ")"         (. program.kind = Kinds.Fun;
+                                                program.type = Types.voidType;
+                                                Table.insert(program);
+                                                StackFrame frame = new StackFrame();
+                                                Table.openScope();
+                                                Label DSPLabel = new Label(known);
+                                                CodeGen.openStackFrame(0); .)
+     WEAK "{" { Statement<frame> }
+     WEAK "}"                                (. CodeGen.fixDSP(DSPLabel.address(), frame.size);
+                                                CodeGen.leaveProgram();
+                                                Table.closeScope(); .)
+  .
+
+  Statement<StackFrame frame>
+  =  SYNC (   Block<frame>
+            | ConstDeclarations
+            | VarDeclarations<frame>
+            | AssignmentStatement
+            | IfStatement<frame>
+            | WhileStatement<frame>
+			| DoWhileStatement<frame>
+            | BreakStatement
+            | HaltStatement
+            | ReadStatement
+            | WriteStatement
+            | ";"                            (. if (warnings) Warning("empty statement"); .)
+          )
+  .
+
+  Block<StackFrame frame>
+  =                                         (. Table.openScope();
+											   boolean empty = true; .)
+     "{" { Statement<frame>     			(. empty = false; .)
+		 } 									(. if (empty && warnings) Warning("empty {} block"); .)
+     WEAK "}"                               (. Table.closeScope(); .)
+  .
+
+  ConstDeclarations
+  = "const" OneConst { WEAK "," OneConst }
+    WEAK ";"
+  .
+
+  OneConst                                   (. Entry constant = new Entry();
+                                                ConstRec con; .)
+  =  Ident<out constant.name>                (. constant.kind = Kinds.Con; .)
+     AssignOp Constant<out con>              (. constant.value = con.value;
+                                                constant.type = con.type;
+                                                Table.insert(constant); .)
+  .
+
+  Constant<out ConstRec con>                 (. con = new ConstRec(); .)
+  =   IntConst<out con.value>                (. con.type = Types.intType; .)
+    | CharConst<out con.value>               (. con.type = Types.charType; .)
+    | "true"                                 (. con.type = Types.boolType; con.value = 1; .)
+    | "false"                                (. con.type = Types.boolType; con.value = 0; .)
+    | "null"                                 (. con.type = Types.nullType; con.value = 0; .)
+  .
+
+  VarDeclarations<StackFrame frame>          (. int type;
+                                                .)
+  =  Type<out type>
+     VarList<frame, type>
+     WEAK ";"
+  .
+
+  Type<out int type>
+  =  BasicType<out type>
+     [ "[]"                                  (. if (type != Types.noType) type++; .)
+     ]
+  .
+
+  BasicType<out int type>                    (. type = Types.noType; .)
+  =   "int"                                  (. type = Types.intType; .)
+    | "bool"                                 (. type = Types.boolType; .)
+    | "char"                                 (. type = Types.charType; .)
+  .
+
+  VarList<StackFrame frame, int type>
+  =  OneVar<frame, type>
+     { WEAK "," OneVar<frame, type> }
+  .
+
+  OneVar<StackFrame frame, int type>
+                                             (. int expType;
+                                                Entry var = new Entry(); .)
+  =  Ident<out var.name>                     (. var.kind = Kinds.Var;
+                                                var.type = type;
+                                                var.offset = frame.size;
+                                                frame.size++; .)
+     (   AssignOp                            (. CodeGen.loadAddress(var); .)
+         Expression<out expType>             (. if (!assignable(var.type, expType))
+                                                  SemError("incompatible types in assignment");
+                                                CodeGen.assign(var.type); .)
+       |                                     
+     )                                       (. Table.insert(var); .)
+  .
+
+  AssignmentStatement                        (. int expType;
+                                                DesType des;
+                                                boolean inc = true;
+                                                
+                                              .)
+  = (  Designator<out des>                   (. if (!Trace.that("assign to a variable", des.entry.kind == Kinds.Var)) // TRACE
+                                                   SemError("cannot assign to " + Kinds.kindNames[des.entry.kind]);
+                                                 .)
+      (  AssignOp
+        Expression<out expType>           (. if (!assignable(des.type, expType))
+                                                  SemError("incompatible types in assignment");
+                                                CodeGen.assign(des.type); .)
+ 
+        | ( "++" | "--"                         (. inc = false; .)
+            )                                   (. if (!isArith(des.type))
+                                                  SemError("arithmetic type needed");
+                                                  CodeGen.incOrDec(inc, des.type); .)
+        )
+     |  ( "++" | "--"                        (. inc = false; .)
+        ) Designator<out des>                (. if (!Trace.that("++/-- on a variable", des.entry.kind == Kinds.Var)) // TRACE
+                                                  SemError("variable designator required");
+                                                if (!isArith(des.type))
+                                                  SemError("arithmetic type required");
+                                                CodeGen.incOrDec(inc, des.type); .)
+    ) WEAK ";"
+  .
+
+  Designator<out DesType des>                (. String name;
+                                                int indexType; .)
+  =  Ident<out name>                         (. Entry entry = Table.find(name);
+                                                Trace.find(name, entry); // TRACE
+                                                boolean notDeclared = !Trace.that("declared", entry.declared); // TRACE
+                                                if (notDeclared) {
+                                                  SemError("undeclared identifier");
+                                                  entry = new Entry(); // new is critical
+                                                  entry.name = name;   // make an entry anyway
+                                                  entry.kind = Kinds.Var;
+                                                  entry.type = Types.noType;
+                                                  entry.offset = 0;    // unimportant
+                                                  Table.insert(entry);
+                                                }
+                                                des = new DesType(entry);
+                                                if (entry.kind == Kinds.Var)
+                                                  CodeGen.loadAddress(entry); .)
+     [     "["                               (. if (notDeclared) entry.type++;
+                                                else if (isArray(des.type)) des.type--;
+                                                else SemError("unexpected subscript");
+                                                if (!Trace.that("subscript a variable", des.entry.kind == Kinds.Var)) // TRACE
+                                                  SemError("unexpected subscript");
+                                                CodeGen.dereference(); .)
+              Expression<out indexType>      (. if (!isArith(indexType))
+                                                  SemError("invalid subscript type");
+                                                CodeGen.index(); .)
+           "]"
+     ]
+  .
+
+  IfStatement<StackFrame frame>              (. Label falseLabel = new Label(!known);
+                                                Label exitLabel = null;
+                                                boolean hasElse = false; .)
+  =  "if" "(" Condition ")"                 (. CodeGen.branchFalse(falseLabel); .)
+        Statement<frame>
+     [ "else"                               (. hasElse = true;
+                                                exitLabel = new Label(!known);
+                                                CodeGen.branch(exitLabel);
+                                                falseLabel.here(); .)
+       Statement<frame>
+     ]                                      (. if (hasElse) exitLabel.here();
+                                                else falseLabel.here(); .)
+  .
+
+  WhileStatement<StackFrame frame>           (. Label loopExit  = new Label(!known);
+                                                Label loopStart = new Label(known);
+                                                CodeGen.brkLabels[CodeGen.bl++] = loopExit; .)
+  =  "while" "(" Condition ")"               (. CodeGen.branchFalse(loopExit); .)
+     Statement<frame>   			 		 (. CodeGen.branch(loopStart);
+                                                loopExit.here();
+                                                CodeGen.bl--; .)
+  .
+
+  DoWhileStatement<StackFrame frame>         (. Label loopExit = new Label(!known);
+                                                Label loopStart = new Label(known);
+                                                CodeGen.brkLabels[CodeGen.bl++] = loopExit; .)
+  =  "do"
+       Statement<frame>
+       WEAK "while"
+     "(" Condition ")"                       (. CodeGen.branchTrue(loopStart);
+                                                loopExit.here();
+                                                CodeGen.bl--; .)
+     WEAK ";"
+  .
+
+  BreakStatement
+  =  "break"                                 (. if (!Trace.that("break inside a loop", CodeGen.bl != 0)) // TRACE
+                                                  SemError("break not within loop");
+                                                else
+                                                  CodeGen.branch(CodeGen.brkLabels[CodeGen.bl - 1]); .)
+     WEAK ";"
+  .
+
+
+ HaltStatement
+  =  "halt"                                  (. CodeGen.leaveProgram(); .)
+     WEAK ";"
+  .
+
+
+  ReadStatement
+  = (  "read"     "("   ReadList    ")"
+     | "readLine" "(" [ ReadList ]  ")"      (. CodeGen.readLine(); .)
+    )
+    WEAK ";"
+  .
+
+  ReadList
+  = ReadElement { WEAK "," ReadElement }
+  .
+
+  ReadElement                                (. String str;
+                                                DesType des; .)
+  =   StringConst<out str>                   (. CodeGen.writeString(str); .)
+    | Designator<out des>                    (. if (!Trace.that("read into a variable", des.entry.kind == Kinds.Var)) // TRACE
+                                                  SemError("wrong kind of identifier");
+                                                switch (des.type) {
+                                                  case Types.intType:
+                                                  case Types.boolType:
+                                                  case Types.charType:                // PRAC 8
+                                                    CodeGen.read(des.type); break;
+                                                  default:
+                                                    SemError("cannot read this type"); break;
+                                                } .)
+  .
+
+  WriteStatement
+  = (   "write"     "("   WriteList   ")"
+      | "writeLine" "(" [ WriteList ] ")"    (. CodeGen.writeLine(); .)
+    )
+    WEAK ";"
+  .
+
+  WriteList
+  = WriteElement { WEAK "," WriteElement }
+  .
+
+  WriteElement                               (. int expType;
+                                                String str; .)
+  =   StringConst<out str>                   (. CodeGen.writeString(str); .)
+    | Expression<out expType>                (. if (!(isArith(expType) || expType == Types.boolType))
+                                                  SemError("cannot write this type");
+                                                switch (expType) {
+                                                  case Types.intType:
+                                                  case Types.boolType:
+                                                  case Types.charType:               // PRAC 8
+                                                    CodeGen.write(expType); break;
+                                                  default:
+                                                    break;
+                                                } .)
+  .
+
+  Condition                                  (. int type; .)
+  =  Expression<out type>                    (. if (!isBool(type))
+                                                  SemError("boolean expression needed"); .)
+  .
+
+  Expression<out int type>                   (. int type2;
+                                                Label shortcircuit = new Label(!known); .)
+  =  AndExp<out type>
+     { "||"                                  (. CodeGen.booleanOp(shortcircuit, CodeGen.or); .)
+       AndExp<out type2>                     (. if (!isBool(type) || !isBool(type2))
+                                                  SemError("Boolean operands needed");
+                                                type = Types.boolType; .)
+     }                                       (. shortcircuit.here(); .)
+  .
+
+  AndExp<out int type>                       (. int type2;
+                                                Label shortcircuit = new Label(!known); .)
+  =  EqlExp<out type>
+     { "&&"                                  (. CodeGen.booleanOp(shortcircuit, CodeGen.and); .)
+       EqlExp<out type2>                     (. if (!isBool(type) || !isBool(type2))
+                                                  SemError("Boolean operands needed");
+                                                type = Types.boolType; .)
+     }                                       (. shortcircuit.here(); .)
+  .
+
+  EqlExp<out int type>                       (. int type2;
+                                                int op; .)
+  =  RelExp<out type>
+     { EqualOp<out op>
+       RelExp<out type2>                     (. if (!compatible(type, type2))
+                                                  SemError("incomparable operand types");
+                                                CodeGen.comparison(op, type);
+                                                type = Types.boolType; .)
+     }
+  .
+
+  RelExp<out int type>                       (. int type2;
+                                                int op; .)
+  =  AddExp<out type>
+     [ RelOp<out op>
+       AddExp<out type2>                     (. if (!isArith(type) || !isArith(type2))
+                                                  SemError("incomparable operand types");
+                                                CodeGen.comparison(op, type);
+                                                type = Types.boolType; .)
+     ]
+  .
+
+  AddExp<out int type>                       (. int type2;
+                                                int op; .)
+  =  MultExp<out type>
+     { AddOp<out op>
+       MultExp<out type2>                    (. if (!isArith(type) || !isArith(type2)) {
+                                                  SemError("arithmetic operands needed");
+                                                  type = Types.noType;
+                                                }
+                                                else type = Types.intType;
+                                                CodeGen.binaryOp(op); .)
+     }
+  .
+
+  MultExp<out int type>                      (. int type2;
+                                                int op; .)
+  =  Factor<out type>
+     { MulOp<out op>
+       Factor<out type2>                     (. if (!isArith(type) || !isArith(type2)) {
+                                                  SemError("arithmetic operands needed");
+                                                  type = Types.noType;
+                                                }
+                                                else type = Types.intType;
+                                                CodeGen.binaryOp(op); .)
+     }
+  .
+
+  Factor<out int type>                       (. type = Types.noType; .)
+  =    Primary<out type>
+     | "+" Factor<out type>                  (. if (!isArith(type)) {
+                                                  SemError("arithmetic operand needed");
+                                                  type = Types.noType;
+                                                }
+                                                else type = Types.intType; .)
+     | "-" Factor<out type>                  (. if (!isArith(type)) {
+                                                  SemError("arithmetic operand needed");
+                                                  type = Types.noType;
+                                                }
+                                                else type = Types.intType;
+                                                CodeGen.negateInteger(); .)
+     | "!" Factor<out type>                  (. if (!isBool(type))
+                                                  SemError("Boolean operand needed");
+                                                type = Types.boolType;
+                                                CodeGen.negateBoolean(); .)
+  .
+
+  Primary<out int type>                      (. type = Types.noType;
+                                                int size; boolean upper = true; 
+                                                DesType des;
+                                                ConstRec con; .)
+  =    Designator<out des>                   (. type = des.type;
+                                                switch (des.entry.kind) {
+                                                  case Kinds.Var:
+                                                    CodeGen.dereference();
+                                                    break;
+                                                  case Kinds.Con:
+                                                    CodeGen.loadConstant(des.entry.value);
+                                                    break;
+                                                  default:
+                                                    SemError("wrong kind of identifier");
+                                                    break;
+                                                } .)
+     | Constant<out con>                     (. type = con.type;
+                                                CodeGen.loadConstant(con.value); .)
+     | "new"
+       (   BasicType<out type>
+           "[" Expression<out size>          (. if (!isArith(size))
+                                                  SemError("array size must be integer");
+                                                type++; .)
+           "]"
+       )                                     (. CodeGen.allocate(); .)
+
+     | "("
+         (   "char" ")"
+             Factor<out type>                (. if (!isArith(type))
+                                                  SemError("invalid cast");
+                                                else { type = Types.charType; CodeGen.castToChar(); }
+                                              .)
+           | "int" ")"
+             Factor<out type>                (. if (!isArith(type))
+                                                  SemError("invalid cast");
+                                                else type = Types.intType; .)
+           | Expression<out type> ")"
+         )
+     | ( "cap"                               (. upper = true; .)
+       | "low"                               (. upper = false; .)
+       )
+         "(" Expression<out type>            (. if (!Trace.that("cap/low of a char", type == Types.charType)) // TRACE
+                                                  SemError("character argument needed");
+                                                type = Types.charType;
+                                                if (upper) CodeGen.capChar();
+                                                else CodeGen.lowChar(); .)
+        ")"
+     | "length" "(" Designator<out des>      (. if (!isArray(des.type))
+                                                  SemError("array type needed for length");
+                                                CodeGen.dereference();
+                                                CodeGen.dereference();
+                                                type = Types.intType; .)
+       ")"
+	 .
+
+
+
+  AddOp<out int op>                          (. op = CodeGen.nop; .)
+  =    "+"                                   (. op = CodeGen.add; .)
+     | "-"                                   (. op = CodeGen.sub; .)
+  .
+
+  MulOp<out int op>                          (. op = CodeGen.nop; .)
+  =    "*"                                   (. op = CodeGen.mul; .)
+     | "/"                                   (. op = CodeGen.div; .)
+     | "%"                                   (. op = CodeGen.rem; .)
+  .
+
+  EqualOp<out int op>                        (. op = CodeGen.nop; .)
+  =    "=="                                  (. op = CodeGen.ceq; .)
+     | "!="                                  (. op = CodeGen.cne; .)
+  .
+
+  RelOp<out int op>                          (. op = CodeGen.nop; .)
+  =    "<"                                   (. op = CodeGen.clt; .)
+     | "<="                                  (. op = CodeGen.cle; .)
+     | ">"                                   (. op = CodeGen.cgt; .)
+     | ">="                                  (. op = CodeGen.cge; .)
+  .
+
+ AssignOp = "=" .
+
+  Ident<out String name>
+  =  identifier                              (. name = token.val; .)
+  .
+
+  StringConst<out String str>
+  =  stringLit                               (. str = token.val;
+                                                str = unescape(str.substring(1, str.length() - 1)); .)
+  .
+
+  CharConst<out int value>
+  =  charLit                                 (. String str = token.val;
+                                                str = unescape(str.substring(1, str.length() - 1));
+                                                value = str.charAt(0); .)
+  .
+
+  IntConst<out int value>
+  =  number                                  (. try {
+                                                  value = Integer.parseInt(token.val);
+                                                } catch (NumberFormatException e) {
+                                                  value = 0; SemError("number out of range");
+                                                } .)
+  .
+
+END Parva.
+

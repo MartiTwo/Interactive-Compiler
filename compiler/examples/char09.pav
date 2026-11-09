@@ -1,0 +1,11 @@
+    void main () {
+	// char09.pav
+    // Display all the values in list[0] .. list[length - 1]
+      int i = 0;
+      int[] list = new int[10];
+      while (i < length(list)) (
+        list[i] = i;
+        write(list[i]);
+        ++i;
+      }
+    } 

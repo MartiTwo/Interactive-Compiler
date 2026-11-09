@@ -1,0 +1,4 @@
+Parva compiler 1.2014
+file break3.pav : (5, 3) break not within loop
+file break3.pav : (10, 3) break not within loop
+2 errors detected

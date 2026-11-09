@@ -1,0 +1,12 @@
+void main () {
+// char04.pav
+// Characters must not be allowed to go out of range
+  char c = '~';
+  int i = 1;
+  while (i < 200) {
+    write(i, ' ', c);
+    if (i % 8 == 0) write('\n');
+    c++;
+    i++;
+  }
+}

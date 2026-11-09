@@ -1,0 +1,8 @@
+Parva compiler 1.2014
+file empty0.pav : (5, 2) empty statement
+file empty0.pav : (5, 4) empty statement
+file empty0.pav : (5, 6) empty statement
+file empty0.pav : (7, 2) empty {} block
+file empty0.pav : (9, 13) empty statement
+Parsed correctly
+5 warnings detected

@@ -1,0 +1,14 @@
+Parva compiler 1.2014
+file errors.pav : (4, 15) number out of range
+file errors.pav : (5, 14) incompatible types in assignment
+file errors.pav : (6, 12) wrong kind of identifier
+file errors.pav : (7, 8) invalid ReadElement
+file errors.pav : (8, 10) boolean expression needed
+file errors.pav : (9, 9) earlier declaration of y is still in scope
+file errors.pav : (10, 17) Boolean operands needed
+file errors.pav : (11, 13) "," expected
+file errors.pav : (11, 15) undeclared identifier
+file errors.pav : (13, 7) undeclared identifier
+file errors.pav : (14, 14) invalid WriteElement
+file errors.pav : (16, 1) ")" expected
+12 errors detected

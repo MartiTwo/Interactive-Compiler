@@ -1,0 +1,9 @@
+void main () {
+// char06.pav
+// Write out the alphabet (with a cast)
+  char c;
+  c = (char) 65;
+  while (c <= (char) 90) {
+    write(c); c++;
+  }
+}

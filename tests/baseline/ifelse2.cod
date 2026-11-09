@@ -1,0 +1,34 @@
+ASSEM
+BEGIN
+  {    0 } DSP      4
+  {    2 } LDA      0
+  {    4 } LDV     
+  {    5 } LDC      1
+  {    7 } CEQ     
+  {    8 } BZE      16
+  {   10 } LDA      2
+  {   12 } LDA      3
+  {   14 } LDV     
+  {   15 } STO     
+  {   16 } LDA      0
+  {   18 } LDV     
+  {   19 } LDC      1
+  {   21 } CEQ     
+  {   22 } BZE      24
+  {   24 } LDA      0
+  {   26 } LDV     
+  {   27 } LDC      1
+  {   29 } CEQ     
+  {   30 } BZE      34
+  {   32 } BRN      34
+  {   34 } LDA      0
+  {   36 } LDV     
+  {   37 } LDC      1
+  {   39 } CEQ     
+  {   40 } BZE      44
+  {   42 } BRN      49
+  {   44 } LDA      1
+  {   46 } LDC      1
+  {   48 } STO     
+  {   49 } HALT    
+END.

@@ -1,0 +1,14 @@
+void displayList() {
+    // Display all the values in list[0] .. list[length - 1]
+      int[] list = new int[4];
+      int i = 0;
+      while (i < length(list)) {
+        read("enter: ", list[i]);
+        ++i;
+      }
+      i = 0;
+      while (i < length(list)) {
+        write(list[i]);
+        ++i;
+      }
+} // displayList

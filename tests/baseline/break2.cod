@@ -1,0 +1,60 @@
+ASSEM
+BEGIN
+  {    0 } DSP      2
+  {    2 } LDA      0
+  {    4 } LDC      0
+  {    6 } STO     
+  {    7 } LDA      0
+  {    9 } LDV     
+  {   10 } LDC      10
+  {   12 } CLT     
+  {   13 } BZE      90
+  {   15 } PRNS     "i = "
+  {   17 } LDA      0
+  {   19 } LDV     
+  {   20 } PRNI    
+  {   21 } PRNS     "\n"
+  {   23 } LDA      0
+  {   25 } LDV     
+  {   26 } LDC      4
+  {   28 } CEQ     
+  {   29 } BZE      33
+  {   31 } BRN      90
+  {   33 } LDA      0
+  {   35 } LDA      0
+  {   37 } LDV     
+  {   38 } LDC      1
+  {   40 } ADD     
+  {   41 } STO     
+  {   42 } LDA      0
+  {   44 } LDV     
+  {   45 } LDC      3
+  {   47 } CEQ     
+  {   48 } BZE      88
+  {   50 } LDA      1
+  {   52 } LDC      10
+  {   54 } STO     
+  {   55 } LDA      1
+  {   57 } LDV     
+  {   58 } LDC      100
+  {   60 } CLT     
+  {   61 } BZE      88
+  {   63 } LDA      1
+  {   65 } LDV     
+  {   66 } PRNI    
+  {   67 } LDA      1
+  {   69 } LDV     
+  {   70 } LDC      40
+  {   72 } CEQ     
+  {   73 } BZE      77
+  {   75 } BRN      88
+  {   77 } LDA      1
+  {   79 } LDA      1
+  {   81 } LDV     
+  {   82 } LDC      10
+  {   84 } ADD     
+  {   85 } STO     
+  {   86 } BRN      55
+  {   88 } BRN      7
+  {   90 } HALT    
+END.

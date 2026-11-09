@@ -1,0 +1,110 @@
+ASSEM
+BEGIN
+  {    0 } DSP      3
+  {    2 } LDA      0
+  {    4 } LDC      97
+  {    6 } STOC    
+  {    7 } LDA      0
+  {    9 } LDC      7
+  {   11 } STOC    
+  {   12 } LDA      1
+  {   14 } LDA      0
+  {   16 } LDV     
+  {   17 } STO     
+  {   18 } LDA      0
+  {   20 } LDA      1
+  {   22 } LDV     
+  {   23 } I2C     
+  {   24 } STOC    
+  {   25 } LDA      1
+  {   27 } LDC      97
+  {   29 } STO     
+  {   30 } LDA      1
+  {   32 } LDC      97
+  {   34 } I2C     
+  {   35 } STO     
+  {   36 } LDA      0
+  {   38 } LDA      0
+  {   40 } LDV     
+  {   41 } NEG     
+  {   42 } STOC    
+  {   43 } LDA      0
+  {   45 } LDA      0
+  {   47 } LDV     
+  {   48 } STOC    
+  {   49 } LDA      0
+  {   51 } LDC      1
+  {   53 } LDC      2
+  {   55 } ADD     
+  {   56 } STOC    
+  {   57 } LDA      0
+  {   59 } LDC      1
+  {   61 } STOC    
+  {   62 } LDA      2
+  {   64 } LDC      12
+  {   66 } ANEW    
+  {   67 } STO     
+  {   68 } LDA      1
+  {   70 } LDA      2
+  {   72 } LDV     
+  {   73 } STO     
+  {   74 } LDA      0
+  {   76 } LDA      2
+  {   78 } LDV     
+  {   79 } STOC    
+  {   80 } LDA      0
+  {   82 } LDC      0
+  {   84 } STOC    
+  {   85 } LDA      1
+  {   87 } LDC      0
+  {   89 } STO     
+  {   90 } LDA      1
+  {   92 } INC     
+  {   93 } LDA      0
+  {   95 } DECC    
+  {   96 } LDA      0
+  {   98 } LDC      97
+  {  100 } STOC    
+  {  101 } LDA      0
+  {  103 } LDV     
+  {  104 } LDC      90
+  {  106 } CLT     
+  {  107 } BZE      118
+  {  109 } LDA      0
+  {  111 } LDV     
+  {  112 } PRNC    
+  {  113 } LDA      0
+  {  115 } INCC    
+  {  116 } BRN      101
+  {  118 } LDA      0
+  {  120 } LDC      97
+  {  122 } STOC    
+  {  123 } LDA      0
+  {  125 } LDV     
+  {  126 } LDC      90
+  {  128 } I2C     
+  {  129 } CLT     
+  {  130 } BZE      141
+  {  132 } LDA      0
+  {  134 } LDV     
+  {  135 } PRNC    
+  {  136 } LDA      0
+  {  138 } INCC    
+  {  139 } BRN      123
+  {  141 } LDA      0
+  {  143 } LDC      97
+  {  145 } STOC    
+  {  146 } LDA      0
+  {  148 } LDV     
+  {  149 } LDC      122
+  {  151 } I2C     
+  {  152 } CLT     
+  {  153 } BZE      164
+  {  155 } LDA      0
+  {  157 } LDV     
+  {  158 } PRNC    
+  {  159 } LDA      0
+  {  161 } INCC    
+  {  162 } BRN      146
+  {  164 } HALT    
+END.

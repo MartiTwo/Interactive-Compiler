@@ -1,0 +1,10 @@
+void main () { $C+
+// break0.pav
+// Simple break statements
+  while (true) {
+    write(1);
+    break;
+    write(2);
+    break;
+  }
+}

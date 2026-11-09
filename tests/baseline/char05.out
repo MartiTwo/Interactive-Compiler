@@ -1,0 +1,6 @@
+Parva compiler 1.2014
+file char05.pav : (5, 3) undeclared identifier
+file char05.pav : (8, 4) undeclared identifier
+file char05.pav : (8, 18) identifier expected
+file char05.pav : (8, 22) invalid OneVar
+4 errors detected

@@ -1,0 +1,7 @@
+Parva compiler 1.2014
+file ifelse2.pav : (6, 15) empty {} block
+file ifelse2.pav : (7, 15) empty {} block
+file ifelse2.pav : (7, 23) empty {} block
+file ifelse2.pav : (8, 15) empty {} block
+Parsed correctly
+4 warnings detected

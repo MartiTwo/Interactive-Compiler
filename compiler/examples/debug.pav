@@ -1,0 +1,10 @@
+$D+ // Turn on debugging mode
+$C+ // list code
+void main (void) {
+  int i;
+  int[] List = new int[10];
+  while (true) { // infinite loop, can generate an index error
+    read(i);
+    List[i] = 100;
+  }
+}

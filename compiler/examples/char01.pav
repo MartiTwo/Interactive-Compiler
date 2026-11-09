@@ -1,0 +1,11 @@
+void main () {
+// char01.pav
+// Very simple allowable operations on characters
+  write('z');
+
+  char c = 'a';
+  write(c);
+
+  read(c);
+  write(c);
+}

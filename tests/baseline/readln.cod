@@ -1,0 +1,19 @@
+ASSEM
+BEGIN
+  {    0 } DSP      1
+  {    2 } LDA      0
+  {    4 } INPI    
+  {    5 }         
+  {    6 } LDA      0
+  {    8 } LDV     
+  {    9 } PRNI    
+  {   10 } PRNL    
+  {   11 } LDA      0
+  {   13 } INPI    
+  {   14 }         
+  {   15 } LDA      0
+  {   17 } LDV     
+  {   18 } PRNI    
+  {   19 } PRNL    
+  {   20 } HALT    
+END.

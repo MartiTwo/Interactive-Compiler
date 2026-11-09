@@ -1,0 +1,8 @@
+elm-stuff/
+.tmp/
+compiler/**/*.class
+!compiler/library/*.class
+compiler/tools-bin/
+compiler/Parva/Parser.java
+compiler/Parva/Scanner.java
+compiler/Parva/Parva.java

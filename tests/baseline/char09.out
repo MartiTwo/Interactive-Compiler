@@ -1,0 +1,4 @@
+Parva compiler 1.2014
+file char09.pav : (6, 32) this symbol not expected in Statement
+file char09.pav : (11, 5) EOF expected
+2 errors detected

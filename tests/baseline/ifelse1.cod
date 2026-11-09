@@ -1,0 +1,21 @@
+ASSEM
+BEGIN
+  {    0 } DSP      1
+  {    2 } LDA      0
+  {    4 } INPI    
+  {    5 } LDA      0
+  {    7 } LDV     
+  {    8 } LDC      0
+  {   10 } CGT     
+  {   11 } BZE      17
+  {   13 } PRNS     "positive"
+  {   15 } BRN      19
+  {   17 } PRNS     "negative"
+  {   19 } LDA      0
+  {   21 } LDV     
+  {   22 } LDC      10
+  {   24 } CGT     
+  {   25 } BZE      29
+  {   27 } PRNS     " and greater than 10"
+  {   29 } HALT    
+END.

@@ -1,0 +1,4 @@
+Parva compiler 1.2014
+file debug.pav : (3, 12) ")" expected
+file debug.pav : (11, 1) "}" expected
+2 errors detected

@@ -1,0 +1,17 @@
+void main () {
+// char02.pav
+// Read a sentence and write it backwards
+  char[] sentence = new char[1000];
+  int i = 0;
+  char ch;
+  read(ch);
+  while (ch != '.') {  // input loop
+    sentence[i] = ch;
+    i = i + 1;
+    read(ch);
+  }
+  while (i > 0) {      // output loop
+    i = i - 1;
+    write(sentence[i]);
+  }
+}

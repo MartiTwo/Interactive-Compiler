@@ -1,0 +1,13 @@
+Parva compiler 1.2014
+
+Symbol table
+votingAg int      Constant  18
+age      int      Variable  0
+eligible int      Variable  1
+total    int      Variable  2
+allEligi bool     Variable  3
+voters   int[]    Variable  4
+main     void     Function 
+
+none none[] null null[] int int[] bool bool[] char char[] void void[] 
+Parsed correctly

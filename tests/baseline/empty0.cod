@@ -1,0 +1,7 @@
+ASSEM
+BEGIN
+  {    0 } DSP      0
+  {    2 } LDC      1
+  {    4 } BZE      6
+  {    6 } HALT    
+END.

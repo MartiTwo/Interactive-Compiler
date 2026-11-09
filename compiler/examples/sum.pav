@@ -1,0 +1,17 @@
+void main () { $C+
+// sum.pav
+// Simple summations
+  const max = 100;
+  int total = 0, n = 0, x;
+  bool isSpace = true;
+  int[] list = new int[max];
+  read(x);
+  while (isSpace && (x != 0))  {
+    if (isSpace) list[n] = x;
+    total = total + x;
+    n = n + 1;
+    isSpace = n < max;
+    read(x);
+  }
+  write(n, " numbers. Average is ", total / n, "\n");
+}

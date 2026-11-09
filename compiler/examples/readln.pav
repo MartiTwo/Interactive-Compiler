@@ -1,0 +1,9 @@
+void main () { $C+
+// readln.pav
+// Simple readLine and writeLine
+  int x;
+  readLine(x);
+  writeLine(x);
+  read(x);  readLine();
+  write(x); writeLine();
+}

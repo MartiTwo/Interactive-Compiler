@@ -1,0 +1,21 @@
+ASSEM
+BEGIN
+  {    0 } DSP      1
+  {    2 } LDA      0
+  {    4 } LDC      65
+  {    6 } I2C     
+  {    7 } STOC    
+  {    8 } LDA      0
+  {   10 } LDV     
+  {   11 } LDC      90
+  {   13 } I2C     
+  {   14 } CLE     
+  {   15 } BZE      26
+  {   17 } LDA      0
+  {   19 } LDV     
+  {   20 } PRNC    
+  {   21 } LDA      0
+  {   23 } INCC    
+  {   24 } BRN      8
+  {   26 } HALT    
+END.

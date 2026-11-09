@@ -1,0 +1,11 @@
+     void main() {
+	// char08.pav
+    // Some misconceptions about arrays
+      int[] array1, array2;
+      array1 = new int[45];                // all elenents originally zero
+      array2 = new int[45];                // all elenents originally zero
+      write(equals(array1, array2));       // true
+      array1[0] = 6;
+      array2[0] = 8;
+      write(equals(array1, array2), array1[0], array2[0]);  // false 6 8
+    } // main

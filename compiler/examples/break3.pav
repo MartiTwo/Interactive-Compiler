@@ -1,0 +1,11 @@
+void main () { $C+
+// break3.pav
+// Illegal break statements
+  int i = 0;
+  break;
+  while (i < 10) {
+    write(i);
+    i = i + 1;
+  }
+  break;
+}

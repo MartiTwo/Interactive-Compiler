@@ -1,0 +1,9 @@
+void main () {
+// char05.pav
+// Simple type casting for characters
+  int i;
+  repeat
+    read("\nSupply ASCII number (65 stops) ", i);
+    write(i, '\t', (char) i, (int) i);
+   until (( char ) i == 'A');
+}

@@ -1,0 +1,18 @@
+ASSEM
+BEGIN
+  {    0 } DSP      1
+  {    2 } LDC      122
+  {    4 } PRNC    
+  {    5 } LDA      0
+  {    7 } LDC      97
+  {    9 } STOC    
+  {   10 } LDA      0
+  {   12 } LDV     
+  {   13 } PRNC    
+  {   14 } LDA      0
+  {   16 } INPC    
+  {   17 } LDA      0
+  {   19 } LDV     
+  {   20 } PRNC    
+  {   21 } HALT    
+END.

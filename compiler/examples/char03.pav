@@ -1,0 +1,9 @@
+void main () {
+// char03.pav
+// Characters can control loops and can be incremented and decremented
+  char c = 'z';
+  while (c >= 'a') {
+    write(c);
+    c--;
+  }
+}

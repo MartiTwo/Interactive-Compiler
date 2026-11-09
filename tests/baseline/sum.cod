@@ -1,0 +1,72 @@
+ASSEM
+BEGIN
+  {    0 } DSP      5
+  {    2 } LDA      0
+  {    4 } LDC      0
+  {    6 } STO     
+  {    7 } LDA      1
+  {    9 } LDC      0
+  {   11 } STO     
+  {   12 } LDA      3
+  {   14 } LDC      1
+  {   16 } STO     
+  {   17 } LDA      4
+  {   19 } LDC      100
+  {   21 } ANEW    
+  {   22 } STO     
+  {   23 } LDA      2
+  {   25 } INPI    
+  {   26 } LDA      3
+  {   28 } LDV     
+  {   29 } BFALSE   37
+  {   31 } LDA      2
+  {   33 } LDV     
+  {   34 } LDC      0
+  {   36 } CNE     
+  {   37 } BZE      88
+  {   39 } LDA      3
+  {   41 } LDV     
+  {   42 } BZE      55
+  {   44 } LDA      4
+  {   46 } LDV     
+  {   47 } LDA      1
+  {   49 } LDV     
+  {   50 } LDXA    
+  {   51 } LDA      2
+  {   53 } LDV     
+  {   54 } STO     
+  {   55 } LDA      0
+  {   57 } LDA      0
+  {   59 } LDV     
+  {   60 } LDA      2
+  {   62 } LDV     
+  {   63 } ADD     
+  {   64 } STO     
+  {   65 } LDA      1
+  {   67 } LDA      1
+  {   69 } LDV     
+  {   70 } LDC      1
+  {   72 } ADD     
+  {   73 } STO     
+  {   74 } LDA      3
+  {   76 } LDA      1
+  {   78 } LDV     
+  {   79 } LDC      100
+  {   81 } CLT     
+  {   82 } STO     
+  {   83 } LDA      2
+  {   85 } INPI    
+  {   86 } BRN      26
+  {   88 } LDA      1
+  {   90 } LDV     
+  {   91 } PRNI    
+  {   92 } PRNS     " numbers. Average is "
+  {   94 } LDA      0
+  {   96 } LDV     
+  {   97 } LDA      1
+  {   99 } LDV     
+  {  100 } DIV     
+  {  101 } PRNI    
+  {  102 } PRNS     "\n"
+  {  104 } HALT    
+END.

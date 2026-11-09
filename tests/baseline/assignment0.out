@@ -1,0 +1,7 @@
+Parva compiler 1.2014
+file assignment0.pav : (8, 7) invalid AssignmentStatement
+file assignment0.pav : (8, 11) empty statement
+file assignment0.pav : (9, 4) invalid AssignmentStatement
+file assignment0.pav : (9, 8) empty statement
+2 errors detected
+2 warnings detected

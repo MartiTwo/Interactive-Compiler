@@ -1,0 +1,27 @@
+ASSEM
+BEGIN
+  {    0 } DSP      1
+  {    2 } PRNS     "\nSupply ASCII number (65 stops) "
+  {    4 } LDA      0
+  {    6 } INPI    
+  {    7 } LDA      0
+  {    9 } LDV     
+  {   10 } PRNI    
+  {   11 } LDC      9
+  {   13 } PRNC    
+  {   14 } LDA      0
+  {   16 } LDV     
+  {   17 } I2C     
+  {   18 } PRNC    
+  {   19 } LDA      0
+  {   21 } LDV     
+  {   22 } PRNI    
+  {   23 } LDA      0
+  {   25 } LDV     
+  {   26 } I2C     
+  {   27 } LDC      65
+  {   29 } CNE     
+  {   30 } NOT     
+  {   31 } BZE      2
+  {   33 } HALT    
+END.

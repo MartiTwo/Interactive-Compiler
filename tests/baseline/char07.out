@@ -1,0 +1,12 @@
+Parva compiler 1.2014
+file char07.pav : (7, 7) incompatible types in assignment
+file char07.pav : (12, 9) incompatible types in assignment
+file char07.pav : (13, 9) incompatible types in assignment
+file char07.pav : (14, 11) incompatible types in assignment
+file char07.pav : (15, 7) incompatible types in assignment
+file char07.pav : (16, 30) incompatible types in assignment
+file char07.pav : (17, 13) invalid cast
+file char07.pav : (18, 14) invalid cast
+file char07.pav : (19, 7) incompatible types in assignment
+file char07.pav : (20, 7) incompatible types in assignment
+10 errors detected

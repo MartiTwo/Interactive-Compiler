@@ -1,0 +1,11 @@
+void main () { $C+
+// ifelse1.pav
+// if-then-else
+  int i;
+  read(i);
+  if (i > 0)
+    write("positive");
+  else write("negative");
+  if (i > 10)
+    write(" and greater than 10");
+}

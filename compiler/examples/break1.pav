@@ -1,0 +1,11 @@
+void main () { $C+
+// break1.pav
+// Two break statements in one loop
+  int i = 0;
+  while (i < 10) {
+    write(i);
+    if (i == 4) break;
+    i = 0;
+    break;
+  }
+}

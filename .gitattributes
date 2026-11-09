@@ -1,0 +1,8 @@
+*.sh text eol=lf
+# Elm multi-line strings keep their source line ends, so LF keeps builds byte-reproducible.
+*.elm text eol=lf
+*.html text eol=lf
+traces/*.json text eol=lf
+# Recorded bytes: never convert line endings (.cod mixes a bare LF with CRLF).
+tests/baseline/* -text
+compiler/examples/* -text

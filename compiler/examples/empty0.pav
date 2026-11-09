@@ -1,0 +1,11 @@
+void main () { $C+
+// empty0.pav
+// Doesn't do much
+
+ ; ; ;
+
+ { }
+
+if (true) { ; }
+
+}

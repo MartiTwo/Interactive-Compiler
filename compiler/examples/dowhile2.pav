@@ -1,0 +1,9 @@
+void Main () { $C+
+// dowhile2.pav
+// simple do-while loop - incorrect
+  int i = 0;
+  do {
+    write(i);
+    i = i + 1; }
+  while i != 10);
+}

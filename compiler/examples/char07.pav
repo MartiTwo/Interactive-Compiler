@@ -1,0 +1,32 @@
+void main () {
+// char07.pav
+// Some mismatched types or type casts
+  char c;
+  int i;
+  c = 'a';
+  c = 7;
+  i = c;
+  c = (char) i;
+  i = 'a';
+  i = (char) 'a';
+  c = - c;
+  c = + c;
+  c = 1 + 2;
+  c = true;
+  char [] string = new int[12];
+  i = (int) string;
+  c = (char) string;
+  c = null;
+  i = null;
+  i++;
+  c--;
+  c = 'a'; while (c < 90) {
+    write(c); c++;
+  }
+  c = 'a'; while (c < (int) (char) 90 ) {
+    write(c); c++;
+  }
+  c = 'a'; while (c < (char) (int) 'z') {
+    write(c); c++;
+  }
+}

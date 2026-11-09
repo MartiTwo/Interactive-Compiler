@@ -1,0 +1,45 @@
+ASSEM
+BEGIN
+  {    0 } DSP      2
+  {    2 } LDA      0
+  {    4 } LDC      45
+  {    6 } ANEW    
+  {    7 } STO     
+  {    8 } LDA      1
+  {   10 } LDC      45
+  {   12 } ANEW    
+  {   13 } STO     
+  {   14 } LDA      0
+  {   16 } LDV     
+  {   17 } LDA      0
+  {   19 } LDV     
+  {   20 } LDA      1
+  {   22 } LDV     
+  {   23 } LDA      0
+  {   25 } LDV     
+  {   26 } LDC      0
+  {   28 } LDXA    
+  {   29 } LDC      6
+  {   31 } STO     
+  {   32 } LDA      1
+  {   34 } LDV     
+  {   35 } LDC      0
+  {   37 } LDXA    
+  {   38 } LDC      8
+  {   40 } STO     
+  {   41 } LDA      0
+  {   43 } LDV     
+  {   44 } LDA      0
+  {   46 } LDV     
+  {   47 } LDA      1
+  {   49 } LDV     
+  {   50 } LDA      0
+  {   52 } LDV     
+  {   53 } LDC      0
+  {   55 } LDXA    
+  {   56 } LDA      1
+  {   58 } LDV     
+  {   59 } LDC      0
+  {   61 } LDXA    
+  {   62 } HALT    
+END.

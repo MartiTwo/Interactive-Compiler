@@ -1,0 +1,19 @@
+void main () { $C+
+// break2.pav
+// More break statements
+  int i = 0;
+  while (i < 10) {
+    write("i = ", i, "\n");
+    if (i == 4) break;
+    i = i + 1;
+    if (i == 3) {
+      int j = 10;
+      while (j < 100) {
+        write(j);
+        if (j == 40) break;
+        j = j + 10;
+      }
+    }
+//    break;
+  }
+}

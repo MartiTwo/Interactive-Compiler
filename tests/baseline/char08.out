@@ -1,0 +1,13 @@
+Parva compiler 1.2014
+file char08.pav : (7, 13) undeclared identifier
+file char08.pav : (7, 26) ")" expected
+file char08.pav : (7, 28) cannot write this type
+file char08.pav : (7, 36) empty statement
+file char08.pav : (10, 19) "," expected
+file char08.pav : (10, 26) ")" expected
+file char08.pav : (10, 28) cannot write this type
+file char08.pav : (10, 46) invalid AssignmentStatement
+file char08.pav : (10, 57) invalid AssignmentStatement
+file char08.pav : (10, 58) empty statement
+8 errors detected
+2 warnings detected
